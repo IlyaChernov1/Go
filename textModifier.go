@@ -12,22 +12,22 @@ type Text struct {
 }
 
 func (t *Text) textModifier() {
-	// замена любого кол-ва пробелов на 1
+
+	// A. Замена любого кол-ва пробелов на 1
 	for strings.Contains(t.Content, "  ") {
 		t.Content = strings.Replace(t.Content, "  ", " ", -1)
 	}
-
+	// B. Если знак - замена символа слева на символ справа
 	//преобразовываем строку в срез рун чтобы верно выводилась латиница
 	runes := []rune(t.Content)
 	result := ""
 
 	i := 0
 	for i < len(runes) {
-
 		if runes[i] == '-' { // Если текущий символ - минус
 			if i > 0 && i < len(runes)-1 { // Проверяем есть ли символы слева и справа
 				// Меняем местами символы
-				result += string(runes[i+1]) + string(runes[i-1])
+				result = result[:len(result)-1] + string(runes[i+1]) + string(runes[i-1])
 				i++ // Пропускаем следующий символ,т.к он уже обработан
 			}
 		} else {
@@ -35,15 +35,13 @@ func (t *Text) textModifier() {
 		}
 		i++
 	}
-
 	t.Content = result
+	result = strings.TrimSpace(result)
 
-	//меняем "+" на "!"
+	// C. Меняем "+" на "!"
 	t.Content = strings.ReplaceAll(t.Content, "+", "!")
 
-	//удаление лишних пробелов
-	t.Content = strings.TrimSpace(t.Content)
-
+	// D. Если есть цифры от 1 до 9,удалить и добавить их сумму в конец
 	//преобразуем строку в срез рун
 	runes = []rune(t.Content)
 	result = ""
@@ -61,7 +59,6 @@ func (t *Text) textModifier() {
 	if sum > 0 {
 		result += fmt.Sprintf(" %d", sum) //добавляем сумму цифр в конец строки
 	}
-
 	t.Content = result
 	fmt.Println(t.Content)
 }
