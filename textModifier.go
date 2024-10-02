@@ -59,7 +59,13 @@ func (t *Text) textModifier() {
 	if sum > 0 {
 		result += fmt.Sprintf(" %d", sum) //добавляем сумму цифр в конец строки
 	}
+
 	t.Content = result
+	/* решить проблему с кодировкой(если это с ней проблема была)
+	смог только так, выводилось
+	(Я �люб�лю голанг всем сердцем!)*/
+	t.Content = strings.Replace(t.Content, "�", "", -1)
+
 	fmt.Println(t.Content)
 }
 
